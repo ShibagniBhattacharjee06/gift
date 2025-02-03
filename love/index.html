@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Existing CSS styles */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1000px;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .title-container {
+            position: relative;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .title-container:hover {
+            transform: translateZ(20px) rotateX(5deg) rotateY(5deg);
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #e07676, #992004);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: slideIn 1.5s ease-out;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+            perspective: 1000px;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            min-width: 150px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .countdown-item:hover {
+            transform: translateZ(20px);
+        }
+
+        .countdown-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .countdown-label {
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 4rem 0;
+            perspective: 1000px;
+        }
+
+        .image-card {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+
+        .image-card:hover {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .card-back {
+            background: rgba(255,255,255,0.9);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: #333;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .message {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+            line-height: 1.8;
+            font-size: 1.3rem;
+            color: #fff;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .message:hover {
+            transform: translateZ(20px);
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hearts-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: #fff;
+            font-size: 24px;
+            animation: float 6s ease-in infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* New CSS for Animated Envelope */
+        .envelope-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            margin: 3rem auto;
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .envelope.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: #ff6f61;
+            clip-path: polygon(0 0, 50% 50%, 100% 0);
+            transform-origin: top;
+            transition: transform 0.5s ease;
+            z-index: 2;
+        }
+
+        .envelope-body {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: #ff8c7a;
+            border-radius: 0 0 10px 10px;
+            z-index: 1;
+        }
+
+        .letter {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            padding: 2rem;
+            box-sizing: border-box;
+            border-radius: 10px;
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+            z-index: 0;
+        }
+
+        
+    
+
+        .letter p {
+            margin: 0;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-container" id="hearts"></div>
+    
+    <div class="container">
+        <div class="title-container">
+            <h1>Happy One Year Anniversary! ❤️</h1>
+        </div>
+        
+        <div class="countdown">
+            <div class="countdown-item">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-label">Days</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-label">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-label">Minutes</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-label">Seconds</div>
+            </div>
+        </div>
+
+        <div class="gallery">
+            <div class="image-card">
+                <div class="card-front">
+                    <img src="1.jpg" alt="Tom and Jerry 1" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="card-back">
+                    Here to my Tom from his Jerry we are always fighting, teasing, and driving each other crazy, yet never able to stay apart. No matter how many silly arguments we have, at the end of the day, we know we can’t live without each other. You’re my favorite kind of chaos , and I love you endlessly. ❤️🐭🐱
+                </div>
+            </div>
+            <div class="image-card">
+                <div class="card-front">
+                    <img src="3.jpg" alt="Tom and Jerry 2" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="card-back">
+                    Through all the fights, laughter, and unforgettable moments, my heart still chooses you, every single time. ❤️
+                </div>
+            </div>
+        </div>
+
+        <!-- Animated Envelope -->
+        <div class="envelope-container">
+            <div class="envelope" id="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body"></div>
+                <div class="letter">
+                    <p>My Dearest Love,</p>
+                    <br>
+                    <p>One magical year has passed since our hearts became one. Like Tom and Jerry, we've had our playful chases, our silly moments, and our perfect     <b>My love,</b></p>
+                    <br>
+                    <p>One whole year—365 days of love, laughter, and, yes, our fair share of fights. But if there’s one thing I’ve learned, it’s that no argument, no misunderstanding, no rough patch could ever outweigh the love we share. Every challenge has only made us stronger, every tear has been followed by tighter hugs, and every fight has ended with us choosing each other all over again.</p>
+                    <br>
+                    <p>You are my heart’s safest place, my best friend, my greatest love. Through the ups and downs, you’ve been my constant, my comfort, and my home. Thank you for loving me, for fighting with me and for me, and for never giving up on us. I wouldn’t trade a single moment of this journey for anything.</p>
+                    <br>
+                    <p>Here’s to us—forever and always. More love, more laughter, more growth, and maybe just a little less fighting (but only the cute ones 😉) and a lifetime of choosing each other, every single day. I love you, forever and always. 💕✨. </p>
+                    <br> 
+                    <p>Forever Yours,</p>
+                    <p>Shibagni Bhattacharjee ❤️</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="music-control" id="musicControl">🎵</div>
+
+    <script>
+        // Create sparkle effect
+        function createSparkle(e) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = e.pageX + 'px';
+            sparkle.style.top = e.pageY + 'px';
+            document.body.appendChild(sparkle);
+            
+            sparkle.style.animation = 'sparkle 1s ease-in-out';
+            setTimeout(() => sparkle.remove(), 1000);
+        }
+
+        document.addEventListener('mousemove', createSparkle);
+
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            document.getElementById('hearts').appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 6000);
+        }
+
+        setInterval(createHeart, 300);
+
+        // Countdown Timer
+        function updateCountdown() {
+            const targetDate = new Date('2024-02-04T00:00:00'); // Set this to your anniversary date
+            targetDate.setFullYear(targetDate.getFullYear() + 1);
+            
+            const currentDate = new Date();
+            const difference = targetDate - currentDate;
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        // 3D effect for countdown items
+        document.querySelectorAll('.countdown-item').forEach(item => {
+            item.addEventListener('mousemove', (e) => {
+                const rect = item.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const angleX = (y - centerY) / 30;
+                const angleY = (centerX - x) / 30;
+                
+                item.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) translateZ(20px)`;
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'none';
+            });
+        });
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Background music control
+        let isPlaying = false;
+        const musicControl = document.getElementById('musicControl');
+        const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
+
+        musicControl.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                musicControl.textContent = '🎵';
+            } else {
+                audio.play();
+                musicControl.textContent = '⏸️';
+            }
+            isPlaying = !isPlaying;
+        });
+    
+        // Animated Envelope
+        const envelope = document.getElementById('envelope');
+        envelope.addEventListener('click', () => {
+            envelope.classList.toggle('flipped');
+        });
+    </script>
+</body>
+</html>
